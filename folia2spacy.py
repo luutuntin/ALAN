@@ -1,12 +1,13 @@
 #! /usr/bin python3
 
 from pynlpl.formats import folia
+import os
 import sys
 import spacy
 import getopt
 
 def usage():
-    print("This script converts a folia xml file into a spacy Doc object")
+    print("This script converts a FOLIA XML file into a SpaCy Doc object")
     print("Usage: python3 folia2spacy.py folia-file")
 
 def build_spacy_doc(folia_file):
@@ -33,10 +34,16 @@ def main():
         else:
             raise Exception("No such option: " + o)
 
-    if len(args) < 1:
+    if len(args) == 1:
+        fn = sys.argv[1]
+        if os.path.exists(fn):
+            doc = build_spacy_doc(fn)
+        else:
+            print("ERROR: File or directory not found: " + fn, file=sys.stderr)
+            sys.exit(3)
+    else:
         usage()
         sys.exit(2)
-    doc = build_spacy_doc(sys.argv[1])
 
 if __name__ == '__main__':
     main()
